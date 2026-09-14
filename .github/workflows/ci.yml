@@ -60,6 +60,6 @@ jobs:
         run: npm run build
 
       - name: Deploy to Firebase Hosting
-        run: npx firebase deploy --only hosting:prod --project mixaline --token "$FIREBASE_TOKEN"
+        run: npx firebase-tools@latest deploy --only hosting:prod --project mixaline --token "$FIREBASE_TOKEN"
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
