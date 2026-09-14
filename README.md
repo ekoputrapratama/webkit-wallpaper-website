@@ -28,7 +28,7 @@ A community hub for uploading, browsing, downloading, and rating themes for [**w
 
 ### Prerequisites
 
-- Node.js 18+ (npm)
+- Node.js 22.12+ (Node 24 recommended; required by Vitest 5)
 - A Firebase project with email/password **Authentication**, a **Firestore** database, **Storage**, and **Hosting**
 
 ### 1. Install dependencies
