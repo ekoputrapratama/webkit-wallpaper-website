@@ -1,0 +1,128 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // --- Wallpapers collection ---
+    match /wallpapers/{themeId} {
+      // Anyone can read wallpapers (public gallery)
+      allow read: if true;
+
+      // Authenticated users can create wallpapers
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasAll([
+          'name', 'description', 'author', 'uid',
+          'thumbnail_url', 'wallpaper_url', 'type',
+          'tags', 'donation_url', 'donation_label',
+          'downloads', 'created_at'
+        ])
+        && request.resource.data.uid is string
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 100
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 1000
+        && request.resource.data.author is string
+        && request.resource.data.author.size() > 0
+        && request.resource.data.author.size() <= 100
+        && request.resource.data.thumbnail_url is string
+        && request.resource.data.wallpaper_url is string
+        && request.resource.data.type == "theme"
+        && request.resource.data.tags is list
+        && request.resource.data.tags.size() <= 20
+        && request.resource.data.downloads == 0
+        && request.resource.data.created_at == request.time;
+
+      // Owner can update their wallpaper; anyone authenticated can increment downloads
+      allow update: if isAuthenticated()
+        && (
+          // Owner updates
+          (resource.data.uid == request.auth.uid && request.resource.data.uid == resource.data.uid)
+          ||
+          // Any authenticated user can increment downloads only
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['downloads'])
+        );
+
+      // Only the owner can delete their wallpaper
+      allow delete: if isAuthenticated()
+        && resource.data.uid == request.auth.uid;
+    }
+
+    // --- Users collection ---
+    match /users/{userId} {
+      // Anyone can read user profiles (for author display)
+      allow read: if true;
+
+      // Users can only create/update their own profile (document ID = auth UID)
+      allow create: if isAuthenticated()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasAll([
+          'displayName', 'email', 'bio', 'updated_at'
+        ])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 100
+        && request.resource.data.email is string;
+
+      allow update: if isAuthenticated()
+        && request.auth.uid == userId;
+
+      // No delete allowed - profiles are permanent
+      allow delete: if false;
+    }
+
+    // --- Likes collection ---
+    match /likes/{likeId} {
+      // Anyone can read likes (for like counts)
+      allow read: if true;
+
+      // Authenticated users can create a like if:
+      // - The document ID matches the pattern {themeId}_{uid}
+      // - The uid field matches the authenticated user
+      // - The themeId field is provided
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasAll(['themeId', 'uid', 'created_at'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.themeId is string
+        && request.resource.data.themeId.size() > 0;
+
+      // Users can only delete their own likes
+      allow delete: if isAuthenticated()
+        && resource.data.uid == request.auth.uid;
+
+      // No updates allowed on likes
+      allow update: if false;
+    }
+
+    // --- Comments subcollection (wallpapers/{themeId}/comments) ---
+    match /wallpapers/{themeId}/comments/{commentId} {
+      // Anyone can read comments
+      allow read: if true;
+
+      // Authenticated users can create comments
+      allow create: if isAuthenticated()
+        && request.resource.data.keys().hasAll([
+          'uid', 'author', 'text', 'avatarURL', 'created_at'
+        ])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 2000
+        && request.resource.data.author is string
+        && request.resource.data.author.size() > 0;
+
+      // Only the comment owner can delete their comment
+      allow delete: if isAuthenticated()
+        && resource.data.uid == request.auth.uid;
+
+      // No updates allowed on comments
+      allow update: if false;
+    }
+  }
+}
