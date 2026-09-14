@@ -5,7 +5,9 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { register } from "../src/firebase";
 import RegisterPage from "../src/components/RegisterPage";
 
-vi.mock("../src/firebase");
+vi.mock("../src/firebase", () => ({
+  register: vi.fn(),
+}));
 
 function renderWithRouter() {
   return render(

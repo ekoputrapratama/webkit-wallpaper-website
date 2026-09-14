@@ -5,7 +5,9 @@ import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { login } from "../src/firebase";
 import LoginPage from "../src/components/LoginPage";
 
-vi.mock("../src/firebase");
+vi.mock("../src/firebase", () => ({
+  login: vi.fn(),
+}));
 
 function renderWithRouter() {
   return render(

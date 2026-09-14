@@ -4,7 +4,12 @@ import userEvent from "@testing-library/user-event";
 import { submitTheme, getProfile, fetchThemeById, updateTheme } from "../src/firebase";
 import ThemeForm from "../src/components/ThemeForm";
 
-vi.mock("../src/firebase");
+vi.mock("../src/firebase", () => ({
+  submitTheme: vi.fn(),
+  getProfile: vi.fn(),
+  fetchThemeById: vi.fn(),
+  updateTheme: vi.fn(),
+}));
 
 const testUser = {
   uid: "owner-1",
