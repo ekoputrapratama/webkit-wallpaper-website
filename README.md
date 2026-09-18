@@ -49,7 +49,10 @@ VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
 VITE_FIREBASE_APP_ID=your-app-id
 VITE_FIRESTORE_DATABASE_ID=your-database-id
+VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ```
+
+`VITE_GOOGLE_ANALYTICS_ID` is optional — Google Analytics (gtag.js) is loaded only when it's set. Set it in your `.env` for local development.
 
 ### 3. Run the dev server
 
@@ -87,6 +90,7 @@ npx firebase deploy --only hosting:prod --project <project-id>
 The workflow in `.github/workflows/ci.yml` runs the test suite on every push/PR to `main` and deploys to Firebase Hosting on pushes to `main`. The following repository secrets must be configured:
 
 - `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`, `VITE_FIRESTORE_DATABASE_ID`
+- `VITE_GOOGLE_ANALYTICS_ID` — optional, enables Google Analytics in the deployed site
 - `FIREBASE_TOKEN` — generate one with `npx firebase login:ci`
 
 ## Security Rules

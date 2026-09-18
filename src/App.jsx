@@ -1,6 +1,8 @@
 import React from "react";
-import { Routes, Route, Navigate, useParams } from "react-router-dom";
+import { Routes, Route, Navigate, useParams, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { initAnalytics, trackPageView } from "./analytics";
+import BackgroundCanvas from "./components/BackgroundCanvas";
 import Navbar from "./components/Navbar";
 import HomePage from "./components/HomePage";
 import ThemeDetailPage from "./components/ThemeDetailPage";
@@ -19,8 +21,16 @@ function ProtectedRoute({ children }) {
 }
 
 export default function App() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    initAnalytics();
+    trackPageView(location.pathname + location.search);
+  }, [location.pathname, location.search]);
+
   return (
     <>
+      <BackgroundCanvas />
       <Navbar />
       <div className="app">
         <main>

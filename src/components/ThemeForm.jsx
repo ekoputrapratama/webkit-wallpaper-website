@@ -1,5 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { submitTheme, updateTheme, getProfile, fetchThemeById } from "../firebase";
+import { CrafyImageCompressJS } from "../vendor/CrafyImageCompressJS";
+
+const GIF_WORKER_URL = `${import.meta.env.BASE_URL}gif.worker.js`;
+const PREVIEW_MAX_WIDTH = 240;
+const PREVIEW_QUALITY = 0.7;
 
 export default function ThemeForm({ user, onSubmitted, themeId }) {
   const isEdit = Boolean(themeId);
@@ -68,18 +73,43 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
 
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
-  const handleThumbnail = (e) => {
+  const handleThumbnail = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
       setStatus({ ok: false, msg: "Thumbnail must be an image file." });
       return;
     }
-    setThumbnailFile(file);
-    const reader = new FileReader();
-    reader.onload = (ev) => setThumbnailPreview(ev.target.result);
-    reader.readAsDataURL(file);
     setStatus(null);
+
+    const setOriginal = () => {
+      setThumbnailFile(file);
+      const reader = new FileReader();
+      reader.onload = (ev) => setThumbnailPreview(ev.target.result);
+      reader.readAsDataURL(file);
+    };
+
+    setUploadProgress("Compressing preview image...");
+    try {
+      const compressor = new CrafyImageCompressJS(file, file.type, GIF_WORKER_URL);
+      const compressed = await compressor.compressImage(PREVIEW_QUALITY, PREVIEW_MAX_WIDTH);
+      const thumbFile = new File(
+        [compressed],
+        file.type === "image/gif" ? `preview.gif` : `preview.webp`,
+        { type: compressed.type }
+      );
+
+      if (thumbFile.size >= file.size) {
+        setOriginal();
+      } else {
+        setThumbnailFile(thumbFile);
+        setThumbnailPreview(URL.createObjectURL(thumbFile));
+      }
+    } catch {
+      setOriginal();
+    } finally {
+      setUploadProgress("");
+    }
   };
 
   const handleWallpaper = (e) => {
@@ -204,7 +234,11 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
             <img src={thumbnailPreview} alt="Preview" className="thumb-preview" />
           )}
         </div>
-        <span className="hint">PNG, JPG, or SVG — preview image for the store</span>
+        <span className="hint">
+          PNG, JPG, or SVG — preview image for the store.
+          <br />
+          Auto-resized to a 240px WEBP preview before upload.
+        </span>
       </div>
 
       <div className="field">
