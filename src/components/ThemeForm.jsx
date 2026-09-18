@@ -313,7 +313,12 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
       )}
 
       {uploadProgress && (
-        <div className="status ok">{uploadProgress}</div>
+        <div className="preloader-overlay" role="status" aria-live="polite">
+          <div className="preloader">
+            <div className="spinner" />
+            <p>{uploadProgress}</p>
+          </div>
+        </div>
       )}
 
       <button type="submit" disabled={loading}>
