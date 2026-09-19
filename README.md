@@ -108,6 +108,10 @@ Deploy the rules with:
 npx firebase deploy --only firestore:rules --project <project-id>
 ```
 
+## Creating a Theme
+
+Create and design a theme visually with [**WebWallpaper Theme Studio**](https://webwallpaper-theme-studio.vercel.app), then submit the resulting package here. Export your theme as a `.zip` containing an `index.html` plus assets and upload it on the submission page.
+
 ## Contributing
 
 1. Fork the repository
