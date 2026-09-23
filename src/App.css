@@ -884,6 +884,56 @@ header h1 {
 }
 
 /* ===================== */
+/* Notification banner   */
+/* ===================== */
+
+.notification-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background: rgba(108, 99, 255, 0.12);
+  border-bottom: 1px solid rgba(108, 99, 255, 0.35);
+  font-size: 0.88rem;
+  color: var(--text);
+  position: sticky;
+  top: 56px;
+  z-index: 99;
+}
+
+.notification-banner-text strong {
+  color: var(--accent);
+}
+
+.notification-banner-link {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.notification-banner-link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.notification-banner-close {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  transition: color 0.15s;
+}
+
+.notification-banner-close:hover {
+  color: var(--text);
+}
+
+/* ===================== */
 /* Home page             */
 /* ===================== */
 

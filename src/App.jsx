@@ -13,6 +13,42 @@ import AuthorProfile from "./components/AuthorProfile";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
 
+function NotificationBanner() {
+  const [visible, setVisible] = React.useState(
+    () => localStorage.getItem("themeStudioBannerDismissed") !== "true"
+  );
+
+  if (!visible) return null;
+
+  const dismiss = () => {
+    setVisible(false);
+    localStorage.setItem("themeStudioBannerDismissed", "true");
+  };
+
+  return (
+    <div className="notification-banner">
+      <span className="notification-banner-text">
+        Build your own wallpaper with the <strong>WebWallpaper Theme Studio</strong>.
+      </span>
+      <a
+        className="notification-banner-link"
+        href="https://webwallpaper-theme-studio.vercel.app"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Try it now
+      </a>
+      <button
+        className="notification-banner-close"
+        onClick={dismiss}
+        aria-label="Dismiss notification"
+      >
+        &times;
+      </button>
+    </div>
+  );
+}
+
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return <p className="muted">Loading...</p>;
@@ -32,6 +68,7 @@ export default function App() {
     <>
       <BackgroundCanvas />
       <Navbar />
+      <NotificationBanner />
       <div className="app">
         <main>
         <Routes>
