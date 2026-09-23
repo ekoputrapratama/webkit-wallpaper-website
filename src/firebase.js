@@ -142,7 +142,6 @@ export async function submitTheme(data, { thumbnailFile, wallpaperFile, uid }) {
     type: "theme",
     tags: data.tags,
     donation_url: data.donationUrl || "",
-    donation_label: data.donationLabel || "",
     downloads: 0,
     created_at: serverTimestamp(),
   });
@@ -155,7 +154,6 @@ export async function updateTheme(id, data, { thumbnailFile, wallpaperFile, uid,
     description: data.description,
     tags: data.tags,
     donation_url: data.donationUrl || "",
-    donation_label: data.donationLabel || "",
     updated_at: serverTimestamp(),
   };
 

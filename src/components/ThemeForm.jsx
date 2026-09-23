@@ -13,7 +13,6 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
     description: "",
     tags: "",
     donationUrl: "",
-    donationLabel: "",
   });
   const [authorName, setAuthorName] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
@@ -53,7 +52,6 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
           description: theme.description || "",
           tags: (theme.tags || []).join(", "),
           donationUrl: theme.donation_url || "",
-          donationLabel: theme.donation_label || "",
         });
         if (theme.thumbnail_url) {
           setThumbnailPreview(theme.thumbnail_url);
@@ -165,7 +163,6 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
           description: "",
           tags: "",
           donationUrl: "",
-          donationLabel: "",
         });
         setThumbnailFile(null);
         setThumbnailPreview(null);
@@ -291,19 +288,6 @@ export default function ThemeForm({ user, onSubmitted, themeId }) {
           />
           <span className="hint">
             Ko-fi, Buy Me a Coffee, PayPal, GitHub Sponsors, etc.
-          </span>
-        </div>
-        <div className="field">
-          <label htmlFor="donationLabel">Donation Button Label</label>
-          <input
-            id="donationLabel"
-            type="text"
-            value={form.donationLabel}
-            onChange={set("donationLabel")}
-            placeholder="Support me on Ko-fi"
-          />
-          <span className="hint">
-            Custom text for the support button (default: "Support Author")
           </span>
         </div>
       </fieldset>

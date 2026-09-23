@@ -282,12 +282,16 @@ header h1 {
 
 .desc {
   font-size: 0.82rem;
+  line-height: 1.4;
   color: var(--text2);
   margin-bottom: 0.5rem;
+  max-height: 2.8em;
+  min-height: 2.8rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .meta {
@@ -1081,7 +1085,8 @@ header h1 {
 }
 
 .like-btn,
-.download-btn {
+.download-btn,
+.donate-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
@@ -1109,6 +1114,11 @@ header h1 {
 .download-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.donate-btn:hover {
+  border-color: var(--ok);
+  color: var(--ok);
 }
 
 .download-btn:disabled {

@@ -49,7 +49,6 @@ describe("ThemeForm — submit", () => {
     await fillBasicForm();
     await userEvent.type(screen.getByLabelText("Tags"), "shader, animated, dark");
     await userEvent.type(screen.getByLabelText("Donation URL"), "https://ko-fi.com/jane");
-    await userEvent.type(screen.getByLabelText("Donation Button Label"), "Support me");
     await userEvent.click(screen.getByRole("button", { name: "Submit Theme" }));
 
     await waitFor(() =>
@@ -59,7 +58,6 @@ describe("ThemeForm — submit", () => {
           description: "A beautiful animated gradient theme.",
           tags: ["shader", "animated", "dark"],
           donationUrl: "https://ko-fi.com/jane",
-          donationLabel: "Support me",
           author: "Jane Doe",
         },
         {
@@ -168,7 +166,6 @@ describe("ThemeForm — update", () => {
           description: "Old description.",
           tags: ["shader", "animated"],
           donationUrl: "https://ko-fi.com/jane",
-          donationLabel: "Support me",
           author: "Jane Doe",
         },
         {
