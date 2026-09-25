@@ -272,6 +272,9 @@ header h1 {
   font-size: 1rem;
   margin-bottom: 0.2rem;
   color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .author {
